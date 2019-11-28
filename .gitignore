@@ -1,0 +1,13 @@
+
+/.vs/*
+/UserStore.DAL/bin
+/UserStore.DAL/obj
+/UserStore.WEB/bin
+/UserStore.WEB/obj
+/UserStore2/bin
+/UserStore2/obj
+/UserStore3
+/packages/
+*.ico
+*.txt
+*.exe
