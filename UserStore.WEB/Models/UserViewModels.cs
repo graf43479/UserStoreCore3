@@ -52,5 +52,36 @@ namespace UserStore.WEB.Models
     }
 
 
-        
+    public class ForgotPasswordViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
+
+    public class ResetPasswordViewModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Пароль")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        [Display(Name = "Повторите пароль")]
+        public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string Code { get; set; }
+
+    }
+
+
 }
