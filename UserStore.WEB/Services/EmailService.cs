@@ -14,7 +14,7 @@ namespace UserStore.WEB.Services
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Администрация сайта", "login@yandex.ru"));
+            emailMessage.From.Add(new MailboxAddress("Администрация сайта", "graf43479graf@yandex.ru"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
@@ -25,7 +25,7 @@ namespace UserStore.WEB.Services
             using (var client = new MailKit.Net.Smtp.SmtpClient())
             {
                 await client.ConnectAsync("smtp.yandex.ru", 25, false);
-                await client.AuthenticateAsync("login@yandex.ru", "password");
+                await client.AuthenticateAsync("graf43479graf@yandex.ru", "graf43479");
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);

@@ -30,6 +30,8 @@ namespace UserStore.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddEntityFrameworkSqlServer();
+
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
             {
@@ -39,12 +41,17 @@ namespace UserStore.WEB
             services.AddDistributedMemoryCache();
             services.AddSession();
 
-
+            //.AddIdentity<AppUser, AppRole>(config =>
+            // {
+            //     config.User.RequireUniqueEmail = true;
+            //     config.Password.RequireNonAlphanumeric = false;
+            //     config.Cookies.ApplicationCookie.AutomaticChallenge = false;
+            // })
 
             //  services.AddIdentity<AppUser, AppRole>()                
             services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>();                
-                //.AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<ApplicationContext>()              
+                .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -65,7 +72,7 @@ namespace UserStore.WEB
                 // User settings.
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
             });
 
             services.AddTransient<UserManager<AppUser>>();

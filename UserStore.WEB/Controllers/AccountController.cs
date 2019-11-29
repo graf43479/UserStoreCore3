@@ -17,6 +17,8 @@ using UserStore.WEB.Services;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Drawing.Drawing2D;
+using UserStore.DAL.EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace UserStore.WEB.Controllers
 {
@@ -26,6 +28,7 @@ namespace UserStore.WEB.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private ApplicationContext db;
 
         //public AccountController(ILogger<AccountController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         //{
@@ -33,11 +36,12 @@ namespace UserStore.WEB.Controllers
         //    _userManager = userManager;
         //    _signInManager = signInManager;
         //}
-        public AccountController(ILogger<AccountController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(ILogger<AccountController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ApplicationContext context)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            db = context;
         }
 
 
@@ -164,6 +168,7 @@ namespace UserStore.WEB.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
@@ -331,16 +336,21 @@ namespace UserStore.WEB.Controllers
 
         public async Task<ActionResult> EditAccount()
         {
-            string userName = HttpContext.User.Identity.Name;
+            string userName = HttpContext.User.Identity.Name; // User.FindFirst(ClaimTypes.Email).Value; // HttpContext.User.Identity.Name;
             AppUser user = await _userManager.FindByNameAsync(userName);
 
+            AppUser user2 = _userManager.Users.FirstOrDefault(x => x.Id == user.Id);
+            ClientProfile profile = db.ClientProfiles.FirstOrDefault(x => x.ClientProfileID == user.Id);
+           // ClientProfile profile = _userManager.
+
+            AppUser user3 = await _userManager.FindByEmailAsync(user.Email);
             //взять имя из контекста, вернуть в модель,
             //приянть обновленную модель и переслать на update
             RegisterModel model = new RegisterModel()
             {
                 Email = user.Email,
-                Address = user.ClientProfile.Adress,
-                Name = user.ClientProfile.Name
+                Address = profile.Adress,
+                Name = profile.Name
             };
 
             return View(model);
@@ -356,8 +366,9 @@ namespace UserStore.WEB.Controllers
             }
 
             string userName = HttpContext.User.Identity.Name;
-            AppUser user = await _userManager.FindByNameAsync(userName);
-
+            AppUser user = await db.Users.Include(x=>x.ClientProfile).AsNoTracking().FirstOrDefaultAsync(x => x.Email == userName); // 
+          //  _userManager.FindByNameAsync(userName);
+         //   ClientProfile profile = db.ClientProfiles.FirstOrDefault(x => x.ClientProfileID == user.Id);
 
             user.Email = model.Email;
             user.UserName = model.Email;
@@ -366,8 +377,7 @@ namespace UserStore.WEB.Controllers
             var validEmail = await _userManager.UserValidators.First().ValidateAsync(_userManager, user);
 
             if (!validEmail.Succeeded)
-            {
-                ModelState.AddModelError(string.Empty, $"Новые данные пользователя не валидны");
+            {                ModelState.AddModelError(string.Empty, $"Новые данные пользователя не валидны");
             }
 
             IdentityResult validPass = null;
@@ -392,6 +402,7 @@ namespace UserStore.WEB.Controllers
                 if ((validEmail.Succeeded && validPass == null) ||
                     (validEmail.Succeeded && model.Password != string.Empty && validPass.Succeeded))
                 {
+                    //user.ClientProfile = profile;
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {

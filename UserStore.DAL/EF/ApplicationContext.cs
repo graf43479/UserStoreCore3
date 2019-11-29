@@ -17,7 +17,7 @@ namespace UserStore.DAL.EF
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
-          // Database.EnsureDeleted();
+         //  Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         //public ApplicationContext(string connectionString) : base(connectionString)        {     }
