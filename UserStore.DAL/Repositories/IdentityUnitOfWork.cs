@@ -17,7 +17,9 @@ namespace UserStore.DAL.Repositories
         //private readonly UserManager<AppUser> _userManager;
         //private readonly RoleManager<AppRole> _roleManager;
         private ClientRepository clientRepository;
-
+        
+       // private readonly UserManager<AppUser> _userManager;
+        //private readonly SignInManager<AppUser> _signInManager;
 
         private ProductRepository productRepository;
         private ExceptionRepository exceptionRepository;
@@ -30,7 +32,8 @@ namespace UserStore.DAL.Repositories
           // _roleManager = new AppRoleManager(new RoleStore<AppRole>(db));
             clientRepository = new ClientRepository(db);
             productRepository = new ProductRepository(db);
-            exceptionRepository = new ExceptionRepository(db);
+            exceptionRepository = new ExceptionRepository(db);         
+                //_userManager = new UserManager(new UserStore<AppUser>(db));
         }
 
        // public AppUserManager UserManager => userManager;

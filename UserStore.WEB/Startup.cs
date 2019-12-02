@@ -14,7 +14,8 @@ using UserStore.DAL.Entities;
 
 //using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.HttpsPolicy;
-
+using UserStore.WEB.Filters;
+using UserStore.DAL.Repositories;
 
 namespace UserStore.WEB
 {
@@ -38,6 +39,10 @@ namespace UserStore.WEB
                 options.UseSqlServer(connectionString);
             });
 
+
+            //services.AddSqlServerDbContextFactory<ShopDbContext>();
+            //services.AddScoped<IShopEFRepository, EFRepository<ShopDbContext>>();
+
             services.AddDistributedMemoryCache();
             services.AddSession();
 
@@ -50,7 +55,7 @@ namespace UserStore.WEB
 
             //  services.AddIdentity<AppUser, AppRole>()                
             services.AddIdentity<AppUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>()              
+                .AddEntityFrameworkStores<ApplicationContext>()                      
                 .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
@@ -77,11 +82,23 @@ namespace UserStore.WEB
 
             services.AddTransient<UserManager<AppUser>>();
             services.AddTransient<ApplicationContext>();
+            
 
-            services.AddControllersWithViews();
+            
+            //services.AddMvcCore(options => options.Filters.Add(typeof(ExceptionLoggerFilter)));
+            // services.AddMvc(options => options.Filters.Add(typeof(ExceptionLoggerFilter)));
+            //services.AddControllersWithViews(options => options.Filters.Add(new ExceptionLoggerFilter(new IdentityUnitOfWork(new DbContextOptions<ApplicationContext>()))));
+
+
+            //services.AddControllersWithViews(options => options.Filters.Add(new ExceptionLoggerFilter(new IdentityUnitOfWork(services.Where(x=>x.))));
+            services.AddControllersWithViews(options => options.Filters.Add(typeof(ExceptionLoggerFilter)));
+            //services.AddControllersWithViews();
+            
+            // services.AddMvcCore(options => options.Filters.Add(new ExceptionLoggerFilter(new IdentityUnitOfWork(new DbContextOptions<ApplicationContext>()))));
             services.AddRazorPages();
           
             services.AddTransient<DBInitializer>();
+            //services.AddScoped<ExceptionLoggerFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

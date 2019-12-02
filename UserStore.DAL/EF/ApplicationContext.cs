@@ -32,23 +32,31 @@ namespace UserStore.DAL.EF
         public DbSet<Product> Products { get; set; }
 
 
-      /*  protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        /*  protected override void OnModelCreating(DbModelBuilder modelBuilder)
+          {
+              //конфиги
+              //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+              //modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
+              //modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+              //modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+
+              modelBuilder.Configurations.Add(new ProductConfig());
+              modelBuilder.Configurations.Add(new ExceptionDetailConfig());
+
+          }
+          */
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            //конфиги
-            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-
-            //modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
-            //modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
-            //modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
-
-            modelBuilder.Configurations.Add(new ProductConfig());
-            modelBuilder.Configurations.Add(new ExceptionDetailConfig());
-
+            //modelBuilder.ApplyConfiguration<Product>(new ProductConfiguration());
+            base.OnModelCreating(builder);
         }
-        */
-        
+
     }
 
+
+    
     /*
     //public class IdentityDbInit : NullDatabaseInitializer<ApplicationContext>{ } //DropCreateDatabaseAlways<AppIdentityDbContext
     public class IdentityDbInit : DropCreateDatabaseIfModelChanges<ApplicationContext> //DropCreateDatabaseAlways<ApplicationContext>

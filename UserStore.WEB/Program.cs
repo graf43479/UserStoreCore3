@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UserStore.DAL.EF;
 using UserStore.DAL.Entities;
+using UserStore.WEB.Filters;
 
 namespace UserStore.WEB
 {
@@ -19,12 +20,12 @@ namespace UserStore.WEB
         {
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
-            {
+            {                
                 Task t;
                 var services = scope.ServiceProvider;
 
                 try
-                {
+                {                    
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     //  var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 

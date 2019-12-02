@@ -19,10 +19,12 @@ using System.Drawing.Text;
 using System.Drawing.Drawing2D;
 using UserStore.DAL.EF;
 using Microsoft.EntityFrameworkCore;
+using UserStore.WEB.Filters;
 
 namespace UserStore.WEB.Controllers
 {
     [Authorize]
+  // [ServiceFilter(typeof(ExceptionLoggerFilter))]
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;

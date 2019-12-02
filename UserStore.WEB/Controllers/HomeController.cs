@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using UserStore.DAL.Entities;
+using UserStore.WEB.Filters;
 using UserStore.WEB.Models;
 
 namespace UserStore.WEB.Controllers
-{
+{    
+  //  [ServiceFilter(typeof(ExceptionLoggerFilter))]
     public class HomeController : Controller
     {
 
